@@ -91,9 +91,9 @@ Basket::clean($obBasket)
 ```
 _Очищает корзину. В качестве параметра принимает объект корзины Bitrix\Sale\Basket. Не возвращает ничего._
 ```php
-Basket::add($intProductID, $intQuantity = 1)
+Basket::add($intProductID, $intQuantity = 1, $isXmlId = false)
 ```
-_Добавляет товар с кодом $intProductID и количеством $intQuantity в корзину. Не возвращает ничего._
+_Добавляет товар с кодом $intProductID и количеством $intQuantity в корзину. Если бы передан $isXmlId как true, будут добавлены XML_ID поля товара и раздела. Не возвращает ничего._
 ```php
 Basket::count()
 ```
