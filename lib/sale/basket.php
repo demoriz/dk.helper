@@ -23,8 +23,16 @@ class Basket
         }
     }
 
-    public static function add($intProductID, $intQuantity = 1)
+    public static function add($intProductID, $intQuantity = 1, $isXmlId = false)
     {
+        if (!is_numeric($intQuantity)) {
+            $intQuantity = 1;
+        }
+
+        if (!is_bool($isXmlId)) {
+            $isXmlId = fals;
+        }
+
         $obContext = Context::getCurrent();
 
         $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
@@ -32,12 +40,25 @@ class Basket
             $obItem->setField('QUANTITY', $obItem->getQuantity() + $intQuantity);
         } else {
             $obItem = $obBasket->createItem('catalog', $intProductID);
-            $obItem->setFields(array(
+            $arFields = array(
                 'QUANTITY' => $intQuantity,
                 'CURRENCY' => CurrencyManager::getBaseCurrency(),
                 'LID' => $obContext->getSite(),
                 'PRODUCT_PROVIDER_CLASS' => 'CCatalogProductProvider',
-            ));
+            );
+
+            if ($isXmlId) {
+                $strProductXmlId = DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'XML_ID');
+                $intSectionID = DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'IBLOCK_SECTION_ID');
+
+                $arFields['PRODUCT_XML_ID'] = $strProductXmlId;
+
+                if (is_numeric($intSectionID) && $intSectionID > 0) {
+                    $strCatalogXmlId = DK\Helper\Iblock\Section::getFieldsByID($intSectionID, 'XML_ID');
+                    $arFields['CATALOG_XML_ID'] = $strCatalogXmlId;
+                }
+            }
+            $obItem->setFields($arFields);
         }
         $obBasket->save();
     }
