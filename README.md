@@ -13,17 +13,17 @@
 
 ## DK\Helper\Highload\Element
 ```php
-Element::getElement($intIblockID, $arFilter = array(), $arSelect = array(), $intLimit = 0)
+Element::getElement($strIblockData, $arFilter = array(), $arSelect = array(), $intLimit = 0)
 ```
-_Возвращает элементы Highload инфоблока в виде массива. При необходимости можно использовать фильтрацию, указать нужные поля и ограничить количество._
+_Возвращает элементы Highload инфоблока в виде массива. При необходимости можно использовать фильтрацию, указать нужные поля и ограничить количество. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
 ```php
-Element::update($intIblockID, $intElementID, $arUpdate)
+Element::update($strIblockData, $intElementID, $arUpdate)
 ```
-_Обновляет элемент Highload инфоблока. Принимает на вход id инфоблока, id элемента и массив полей со значениями. Можно передавать только то поле которое необходимо обновить. Возвращает true или вызывает исключение с текстом ошибки._
+_Обновляет элемент Highload инфоблока. Принимает на вход id инфоблока, id элемента и массив полей со значениями. Можно передавать только то поле которое необходимо обновить. Возвращает true или вызывает исключение с текстом ошибки. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
 ```php
-Element::add($intIblockID, $arFields)
+Element::add($strIblockData, $arFields)
 ```
-_Добавляет новый элемент Highload инфоблока. Принимает на вход id инфоблока и массив полей со значениями. Возвращает id нового элемента или вызывает исключение с текстом ошибки._
+_Добавляет новый элемент Highload инфоблока. Принимает на вход id инфоблока и массив полей со значениями. Возвращает id нового элемента или вызывает исключение с текстом ошибки. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
 
 ## DK\Helper\Iblock\Element
 ```php
