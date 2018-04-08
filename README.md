@@ -24,6 +24,10 @@ _Обновляет элемент Highload инфоблока. Принимае
 Element::add($strIblockData, $arFields)
 ```
 _Добавляет новый элемент Highload инфоблока. Принимает на вход id инфоблока и массив полей со значениями. Возвращает id нового элемента или вызывает исключение с текстом ошибки. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
+```php
+Element::delete($strIblockData, $arFields)
+```
+_Удаляет элемент Highload инфоблока. Принимает на вход id инфоблока и id элемента. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
 
 ## DK\Helper\Iblock\Element
 ```php

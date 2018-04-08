@@ -70,6 +70,18 @@ class Element
         return $obResult->getId();
     }
 
+    public static function delete($strIblockData, $intElementID)
+    {
+        $strEntityDataClass = self::getEntityDataClass($strIblockData);
+        $obResult = $strEntityDataClass::delete($intElementID);
+
+        if (!$obResult->isSuccess()) {
+            throw new SystemException($obResult->getErrorMessages());
+        }
+
+        return true;
+    }
+
     private static function getEntityDataClass($strIblockData)
     {
         if (is_numeric($strIblockData)) {
