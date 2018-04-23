@@ -15,15 +15,15 @@ Loader::includeModule('highloadblock');
 class Element
 {
     /**
-     * @param $intIblockID
+     * @param $strIblockData
      * @param $arFilter
      * @param $arSelect
      * @param $intLimit
      * @return array
      */
-    public static function getElement($intIblockID, $arFilter = array(), $arSelect = array(), $intLimit = 0)
+    public static function getElement($strIblockData, $arFilter = array(), $arSelect = array(), $intLimit = 0)
     {
-        $strEntityDataClass = self::getEntityDataClass($intIblockID);
+        $strEntityDataClass = self::getEntityDataClass($strIblockData);
 
         $arQuery = array();
 
@@ -46,9 +46,9 @@ class Element
         return $arElements;
     }
 
-    public static function update($intIblockID, $intElementID, $arUpdate)
+    public static function update($strIblockData, $intElementID, $arUpdate)
     {
-        $strEntityDataClass = self::getEntityDataClass($intIblockID);
+        $strEntityDataClass = self::getEntityDataClass($strIblockData);
         $obResult = $strEntityDataClass::update($intElementID, $arUpdate);
 
         if (!$obResult->isSuccess()) {
@@ -58,9 +58,9 @@ class Element
         return true;
     }
 
-    public static function add($intIblockID, $arFields)
+    public static function add($strIblockData, $arFields)
     {
-        $strEntityDataClass = self::getEntityDataClass($intIblockID);
+        $strEntityDataClass = self::getEntityDataClass($strIblockData);
         $obResult = $strEntityDataClass::add($arFields);
 
         if (!$obResult->isSuccess()) {
@@ -70,9 +70,26 @@ class Element
         return $obResult->getId();
     }
 
-    private static function getEntityDataClass($intIblockID)
+    public static function delete($strIblockData, $intElementID)
     {
-        $arHLBlock = HighloadBlockTable::getById($intIblockID)->fetch();
+        $strEntityDataClass = self::getEntityDataClass($strIblockData);
+        $obResult = $strEntityDataClass::delete($intElementID);
+
+        if (!$obResult->isSuccess()) {
+            throw new SystemException($obResult->getErrorMessages());
+        }
+
+        return true;
+    }
+
+    private static function getEntityDataClass($strIblockData)
+    {
+        if (is_numeric($strIblockData)) {
+            $arHLBlock = HighloadBlockTable::getById($strIblockData)->fetch();
+        } else {
+            $arHLBlock = HighloadBlockTable::getList(array('filter' => array('TABLE_NAME' => $strIblockData)))->fetch();
+        }
+
         $obEntity = HighloadBlockTable::compileEntity($arHLBlock);
         $strEntityDataClass = $obEntity->getDataClass();
 
