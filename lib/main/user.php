@@ -44,6 +44,8 @@ class User
                 throw new SystemException($obUser->LAST_ERROR);
             }
 
+            $arParams['ID'] = $intUserID;
+
             return $arParams;
         }
 
