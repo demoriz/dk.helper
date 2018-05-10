@@ -99,6 +99,14 @@ Basket::add($intProductID, $intQuantity = 1, $isXmlId = false)
 ```
 _Добавляет товар с кодом $intProductID и количеством $intQuantity в корзину. Если бы передан $isXmlId как true, будут добавлены XML_ID поля товара и раздела. Не возвращает ничего._
 ```php
+Basket::update($intProductID, $intQuantity = 1, $isXmlId = false)
+```
+_Обновляет информацию о товаре в корзине._
+```php
+Basket::delete($intProductID)
+```
+_Удаляет позицию из корзины._
+```php
 Basket::count()
 ```
 _Возвращает количество товаров в корзине, для данного сайта и пользователя._

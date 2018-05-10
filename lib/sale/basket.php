@@ -25,19 +25,45 @@ class Basket
 
     public static function add($intProductID, $intQuantity = 1, $isXmlId = false)
     {
+        self::_add($intProductID, $intQuantity, 'add', $isXmlId);
+    }
+
+    public static function update($intProductID, $intQuantity = 1, $isXmlId = false)
+    {
+        self::_add($intProductID, $intQuantity, 'update', $isXmlId);
+    }
+
+    public static function delete($intItemID)
+    {
+        $obContext = Context::getCurrent();
+        $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
+
+        $obBasket->getItemById($intItemID)->delete();
+        $obBasket->save();
+    }
+
+    private static function _add($intProductID, $intQuantity = 1, $strMethod = 'add', $isXmlId = false)
+    {
         if (!is_numeric($intQuantity)) {
             $intQuantity = 1;
         }
 
         if (!is_bool($isXmlId)) {
-            $isXmlId = fals;
+            $isXmlId = false;
+        }
+
+        if ($strMethod != 'add' || $strMethod != 'update') {
+            $strMethod = 'add';
         }
 
         $obContext = Context::getCurrent();
 
         $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
         if ($obItem = $obBasket->getExistsItem('catalog', $intProductID)) {
-            $obItem->setField('QUANTITY', $obItem->getQuantity() + $intQuantity);
+            if ($strMethod == 'add') {
+                $intQuantity += $obItem->getQuantity();
+            }
+            $obItem->setField('QUANTITY', $intQuantity);
         } else {
             $obItem = $obBasket->createItem('catalog', $intProductID);
             $arFields = array(
@@ -48,13 +74,13 @@ class Basket
             );
 
             if ($isXmlId) {
-                $strProductXmlId = DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'XML_ID');
-                $intSectionID = DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'IBLOCK_SECTION_ID');
+                $strProductXmlId = \DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'XML_ID');
+                $intSectionID = \DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'IBLOCK_SECTION_ID');
 
                 $arFields['PRODUCT_XML_ID'] = $strProductXmlId;
 
                 if (is_numeric($intSectionID) && $intSectionID > 0) {
-                    $strCatalogXmlId = DK\Helper\Iblock\Section::getFieldsByID($intSectionID, 'XML_ID');
+                    $strCatalogXmlId = \DK\Helper\Iblock\Section::getFieldsByID($intSectionID, 'XML_ID');
                     $arFields['CATALOG_XML_ID'] = $strCatalogXmlId;
                 }
             }
