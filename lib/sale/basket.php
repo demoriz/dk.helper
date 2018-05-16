@@ -52,7 +52,7 @@ class Basket
             $isXmlId = false;
         }
 
-        if ($strMethod != 'add' || $strMethod != 'update') {
+        if ($strMethod != 'add' && $strMethod != 'update') {
             $strMethod = 'add';
         }
 
