@@ -89,7 +89,7 @@ class Basket
         $obBasket->save();
     }
 
-    public static function count()
+    public static function count($isOnlyItems = false)
     {
         $obContext = Context::getCurrent();
 
@@ -97,7 +97,11 @@ class Basket
 
         $intCount = 0;
         foreach ($obBasket as $obBasketItem) {
-            $intCount += $obBasketItem->getQuantity();
+            if ($isOnlyItems) {
+                $intCount ++;
+            } else {
+                $intCount += $obBasketItem->getQuantity();
+            }
         }
 
         return $intCount;
