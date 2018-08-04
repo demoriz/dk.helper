@@ -1,3 +1,3 @@
 <?php
-$MESS['DESCRIPTION'] = 'Вспомогательные функции';
-$MESS['PARTNER_NAME'] = 'Дмитрий Карих';
+$MESS['DKH_DESCRIPTION'] = 'Вспомогательные функции';
+$MESS['DKH_PARTNER_NAME'] = 'Дмитрий Карих';
