@@ -4,7 +4,9 @@ use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 
-if (class_exists('dk_helper')) return;
+if (class_exists('dk_helper')) {
+    return;
+}
 
 
 Class dk_helper extends CModule
@@ -34,12 +36,16 @@ Class dk_helper extends CModule
 
     function DoInstall()
     {
+        //RegisterModuleDependences('main', 'OnEndBufferContent', $this->MODULE_ID, 'System', 'removeSpaces');
+
         RegisterModule($this->MODULE_ID);
         return true;
     }
 
     function DoUninstall()
     {
+        //UnRegisterModuleDependences('main', 'OnEndBufferContent', $this->MODULE_ID, 'System', 'removeSpaces');
+
         UnRegisterModule($this->MODULE_ID);
         return true;
     }

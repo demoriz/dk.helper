@@ -17,6 +17,7 @@ CModule::AddAutoloadClasses(
         'DK\Helper\Main\User' => 'lib/main/user.php',
         'DK\Helper\Main\Debug' => 'lib/main/debug.php',
         'DK\Helper\Main\GarbageStorage' => 'lib/main/garbage_storage.php',
-        'DK\Helper\Main\ClientStorage' => 'lib/main/client_storage.php'
+        'DK\Helper\Main\ClientStorage' => 'lib/main/client_storage.php',
+        'DK\Helper\Main\System' => 'lib/main/system.php'
     )
 );

@@ -60,6 +60,10 @@ _Пакетное удаление разделов информационных
 Section::getFieldsByID($intSectionID, $strFieldName = '')
 ```
 _Возвращает конкретное поле или массив полей раздела информационного блока._
+```php
+Section::getIdByCode($strCode, $intIblockId = 0)
+```
+_Возвращает ID информационного раздела по его символьному коду._
 
 ## DK\Helper\Iblock\Property
 ```php
