@@ -60,10 +60,6 @@ _Пакетное удаление разделов информационных
 Section::getFieldsByID($intSectionID, $strFieldName = '')
 ```
 _Возвращает конкретное поле или массив полей раздела информационного блока._
-```php
-Section::getIdByCode($strCode, $intIblockId = 0)
-```
-_Возвращает ID информационного раздела по его символьному коду._
 
 ## DK\Helper\Iblock\Property
 ```php
@@ -103,9 +99,17 @@ Basket::add($intProductID, $intQuantity = 1, $isXmlId = false)
 ```
 _Добавляет товар с кодом $intProductID и количеством $intQuantity в корзину. Если бы передан $isXmlId как true, будут добавлены XML_ID поля товара и раздела. Не возвращает ничего._
 ```php
-Basket::count()
+Basket::update($intProductID, $intQuantity = 1, $isXmlId = false)
 ```
-_Возвращает количество товаров в корзине, для данного сайта и пользователя._
+_Обновляет информацию о товаре в корзине._
+```php
+Basket::delete($intProductID)
+```
+_Удаляет позицию из корзины._
+```php
+Basket::count($isOnlyItems = false)
+```
+_Возвращает количество товаров в корзине, для данного сайта и пользователя. Если в качестве параметра передано true, то подсчитываться будет только количество позиций, без учёта их количества._
 ```php
 Basket::getDiscountSum($strCoupon = '')
 ```
@@ -162,6 +166,10 @@ _Записывает данные в cookie._
 Strings::getStringOfNum($intNum)
 ```
 _Возвращает прописью переданное число._
+```php
+Strings::declension($intCount, $arVariants, $bIncludeNumber = false)
+```
+_Склоняет и возвращает существительное согласно переданному числительному._
 
 ## DK\Helper\Others\DateTime
 ```php

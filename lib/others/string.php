@@ -54,4 +54,29 @@ class Strings
 
         return $f5;
     }
+
+    public static function declension($intCount, $arVariants, $bIncludeNumber = false)
+    {
+        $strWord = '';
+
+        if ($intCount > 20) {
+            $intLastNum = substr($intCount, -1);
+        } else {
+            $intLastNum = $intCount;
+        }
+
+        if ($intLastNum == 1) {
+            $strWord = $arVariants[0];
+        } elseif ((($intLastNum > 1) && ($intLastNum < 5)) || $intLastNum == 3) {
+            $strWord = $arVariants[1];
+        } elseif ((($intLastNum > 4) && ($intLastNum <= 21)) || $intLastNum == 0) {
+            $strWord = $arVariants[2];
+        }
+
+        if ($bIncludeNumber) {
+            $strWord = $intCount . ' ' . $strWord;
+        }
+
+        return $strWord;
+    }
 }
