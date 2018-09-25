@@ -2,7 +2,7 @@
 
 namespace DK\Helper\Others;
 
-use Bitrix\Main\Type;
+use \Bitrix\Main\Type;
 
 class DateTime
 {
@@ -34,5 +34,14 @@ class DateTime
         }
 
         return $arTimes;
+    }
+
+    static public function reFormatDate($strDate, $strFormat1, $strFormat2)
+    {
+        $date = new Type\DateTime($strDate, $strFormat1);
+
+        $strDate = $date->format($strFormat2);
+
+        return $strDate;
     }
 }
