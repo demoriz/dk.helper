@@ -143,9 +143,13 @@ _Создаёт быстрый заказ. От предыдущего мето�
 
 ## DK\Helper\Sale\Price
 ```php
-Price::setMinMax($intIblockElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
+Price::setMinMaxByOffer($intOfferElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
 ```
-_Заполняет указанные свойства товара минимальной и максимальной ценой из всех имеющихся предложений данного товара._
+_Заполняет указанные свойства товара, соответствующего переданному торговому предложению, минимальной и максимальной ценой из всех имеющихся предложений данного товара._
+```php
+Price::setMinMaxByProduct($intProductElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
+```
+_Заполняет указанные свойства переданного товара минимальной и максимальной ценой из всех имеющихся предложений данного товара._
 ```php
 Price::add($intProductID, $intPriceTypeID, $floatPrice, $strCurrency = 'RUB')
 ```
