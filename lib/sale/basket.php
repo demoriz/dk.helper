@@ -5,6 +5,7 @@ namespace DK\Helper\Sale;
 use Bitrix\Currency\CurrencyManager;
 use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
+use Bitrix\Main\SystemException;
 use Bitrix\Sale;
 use Bitrix\Sale\DiscountCouponsManager;
 
@@ -30,7 +31,7 @@ class Basket
         }
 
         if (!is_bool($isXmlId)) {
-            $isXmlId = fals;
+            $isXmlId = false;
         }
 
         $obContext = Context::getCurrent();
@@ -60,6 +61,14 @@ class Basket
             }
             $obItem->setFields($arFields);
         }
+        $obBasket->save();
+    }
+
+    public static function delete($intItemID)
+    {
+        $obContext = Context::getCurrent();
+        $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
+        $obBasket->getItemById($intItemID)->delete();
         $obBasket->save();
     }
 
