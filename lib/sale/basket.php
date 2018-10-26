@@ -72,6 +72,14 @@ class Basket
         $obBasket->save();
     }
 
+    public static function deleteByProductId($intProductID)
+    {
+        $obContext = Context::getCurrent();
+        $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
+        $obBasket->getExistsItem('catalog', $intProductID)->delete();
+        $obBasket->save();
+    }
+
     public static function count()
     {
         $obContext = Context::getCurrent();

@@ -103,9 +103,13 @@ Basket::update($intProductID, $intQuantity = 1, $isXmlId = false)
 ```
 _Обновляет информацию о товаре в корзине._
 ```php
+Basket::delete($intItemID)
+```
+_Удаляет позицию из корзины. Принимает ID позиции корзины._
+```php
 Basket::delete($intProductID)
 ```
-_Удаляет позицию из корзины._
+_Удаляет позицию из корзины Принимает ID товара._
 ```php
 Basket::count($isOnlyItems = false)
 ```
