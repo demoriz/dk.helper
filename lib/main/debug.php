@@ -15,7 +15,7 @@ class Debug
         }
 
         echo '<pre style="background:#363636; color:#bababa; padding: 7px; border-radius: 5px; font-size: 12px; display: block; z-index: 999999999; line-height: 16px">';
-        echo dump($obData);
+        echo self::dump($obData);
         echo '</pre>';
     }
 
@@ -43,13 +43,13 @@ class Debug
             $strRetVal .= '<span style="color: #cb7832;">Array</span> (<span style="color: #6896ba;">' . count($data) . '</span>)';
             $intIndent++;
             foreach ($data as $key => $value) {
-                //$strRetVal .= "\n$strPrefix [$key] = ";
+                $strRetVal .= "\n" . $strPrefix;
                 if (\is_numeric($key)) {
-                    $strRetVal .= "\n" . $strPrefix . '[<span style="color: #6896ba;">' . $key . '</span>] = ';
+                    $strRetVal .= '[<span style="color: #6896ba;">' . $key . '</span>] = ';
                 } else {
-                    $strRetVal .= "\n" . $strPrefix . '[' . $key . '] = ';
+                    $strRetVal .= '[' . $key . '] = ';
                 }
-                $strRetVal .= dump($value, $intIndent);
+                $strRetVal .= self::dump($value, $intIndent);
             }
 
         } elseif (is_object($data)) {
@@ -58,7 +58,7 @@ class Debug
             foreach ($data AS $key => $value) {
                 //$strRetVal .= "\n$strPrefix $key -> ";
                 $strRetVal .= "\n" . $strPrefix . ' <span style="color: #e0c46c;">' . $key . '</span> -> ';
-                $strRetVal .= dump($value, $intIndent);
+                $strRetVal .= self::dump($value, $intIndent);
             }
         }
 
