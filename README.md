@@ -25,6 +25,10 @@ Element::add($strIblockData, $arFields)
 ```
 _Добавляет новый элемент Highload инфоблока. Принимает на вход id инфоблока и массив полей со значениями. Возвращает id нового элемента или вызывает исключение с текстом ошибки. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
 ```php
+Element::getAllFieldsByReference($arReference)
+```
+_Принимает на вход массив полей свойства типа "справочник", получаемый в компанентах "bitrix:catalog.section", "bitrix:catalog.element" и подобных в "$arResult\['DISPLAY_PROPERTIES'\]\[#property code#\]" либо "$arResult\['ITEMS'\]\[#item number#\]\['DISPLAY_PROPERTIES'\]\[#property code#\]". Возвращает принимаемый массив, дополненный полями соответствующего элемента Highload инфоблока._
+```php
 Element::delete($strIblockData, $arFields)
 ```
 _Удаляет элемент Highload инфоблока. Принимает на вход id инфоблока и id элемента. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
