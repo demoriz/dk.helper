@@ -28,9 +28,9 @@ Class dk_helper extends CModule
         $this->MODULE_VERSION = $arModuleVersion['VERSION'];
         $this->MODULE_VERSION_DATE = $arModuleVersion['VERSION_DATE'];
         $this->MODULE_NAME = 'Helper';
-        $this->MODULE_DESCRIPTION = Loc::getMessage('DESCRIPTION');
+        $this->MODULE_DESCRIPTION = Loc::getMessage('DK_HELPER_DESCRIPTION');
 
-        $this->PARTNER_NAME = Loc::getMessage('PARTNER_NAME');
+        $this->PARTNER_NAME = Loc::getMessage('DK_HELPER_PARTNER_NAME');
         $this->PARTNER_URI = '';
     }
 

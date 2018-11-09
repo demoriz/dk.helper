@@ -9,8 +9,9 @@ class CModuleOptions
     private $arGroups = array();
     private $arOptions = array();
     private $need_access_tab = false;
+    private $strAdditionalHTML = '';
 
-    public function CModuleOptions($module_id, $arTabs, $arGroups, $arOptions, $need_access_tab = false)
+    public function CModuleOptions($module_id, $arTabs, $arGroups, $arOptions, $need_access_tab = false, $strAdditionalHTML = '')
     {
         $this->module_id = $module_id;
         $this->arTabs = $arTabs;
@@ -28,6 +29,10 @@ class CModuleOptions
 
         if ($_REQUEST['update'] == 'Y' && check_bitrix_sessid())
             $this->SaveOptions();
+
+        if (!empty($strAdditionalHTML)) {
+            $this->strAdditionalHTML = $strAdditionalHTML;
+        }
 
         $this->GetCurOptionValues();
     }
@@ -94,7 +99,7 @@ class CModuleOptions
                     case 'SELECT':
                         $input = SelectBoxFromArray($opt, $arOptParams['VALUES'], $val, '', '', ($arOptParams['REFRESH'] == 'Y' ? true : false), ($arOptParams['REFRESH'] == 'Y' ? $this->module_id : ''));
                         if ($arOptParams['REFRESH'] == 'Y')
-                            $input .= '<input type="submit" name="refresh" value="OK" />';
+                            $input .= '&nbsp;<input type="submit" name="refresh" value="OK" />';
                         break;
                     case 'MSELECT':
                         $input = SelectBoxMFromArray($opt . '[]', $arOptParams['VALUES'], $val);
@@ -225,6 +230,8 @@ class CModuleOptions
                 $tabControl->BeginNextTab();
                 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/admin/group_rights.php");
             }
+
+            echo $this->strAdditionalHTML;
 
             $tabControl->Buttons();
 
