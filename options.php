@@ -1,7 +1,8 @@
 <?php
 
-use Bitrix\Main\Loader;
-use Bitrix\Main\Localization\Loc;
+use \Bitrix\Main\Loader;
+use \Bitrix\Main\Localization\Loc;
+use \Bitrix\Main\Application;
 
 Loc::loadMessages(__FILE__);
 
@@ -12,6 +13,7 @@ Loader::includeModule($strModuleID);
 require_once(__DIR__ . '/lib/CModuleOptions.php');
 
 $isShowRightsTab = false;
+$request = Application::getInstance()->getContext()->getRequest();
 
 $arTabs = array(
     array(
@@ -63,6 +65,8 @@ if (!empty($request->get('dk_update'))) {
         $strAdditionalHTML .= '<div>';
         $strAdditionalHTML .= '<p style="color: red;">' . Loc::getMessage('DK_HELPER_INSTALL_ERROR') . '</p>';
         $strAdditionalHTML .= '</div>';
+    } else {
+        LocalRedirect($_SERVER['HTTP_REFERER']);
     }
 }
 
