@@ -53,4 +53,27 @@ class Section
         return false;
     }
 
+    public static function getIdByCode($strCode, $intIblockId = 0)
+    {
+        if (empty($strCode)) {
+            throw new SystemException('$strCode is required');
+        }
+
+        $intSectionId = 0;
+
+        $arFilter = array(
+            'CODE' => $strCode
+        );
+        if (is_numeric($intIblockId) && $intIblockId > 0) {
+            $arFilter['IBLOCK_ID'] = $intIblockId;
+        }
+        $arSelect = array('ID');
+        $dbSection = \CIBlockSection::GetList(array(), $arFilter, false, $arSelect);
+        if ($arFields = $dbSection->GetNext()) {
+            $intSectionId = $arFields['ID'];
+        }
+
+        return $intSectionId;
+    }
+
 }

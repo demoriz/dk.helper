@@ -5,6 +5,7 @@ namespace DK\Helper\Sale;
 use Bitrix\Currency\CurrencyManager;
 use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
+use Bitrix\Main\SystemException;
 use Bitrix\Sale;
 use Bitrix\Sale\DiscountCouponsManager;
 
@@ -25,25 +26,6 @@ class Basket
 
     public static function add($intProductID, $intQuantity = 1, $isXmlId = false)
     {
-        self::_add($intProductID, $intQuantity, 'add', $isXmlId);
-    }
-
-    public static function update($intProductID, $intQuantity = 1, $isXmlId = false)
-    {
-        self::_add($intProductID, $intQuantity, 'update', $isXmlId);
-    }
-
-    public static function delete($intItemID)
-    {
-        $obContext = Context::getCurrent();
-        $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
-
-        $obBasket->getItemById($intItemID)->delete();
-        $obBasket->save();
-    }
-
-    private static function _add($intProductID, $intQuantity = 1, $strMethod = 'add', $isXmlId = false)
-    {
         if (!is_numeric($intQuantity)) {
             $intQuantity = 1;
         }
@@ -52,18 +34,11 @@ class Basket
             $isXmlId = false;
         }
 
-        if ($strMethod != 'add' && $strMethod != 'update') {
-            $strMethod = 'add';
-        }
-
         $obContext = Context::getCurrent();
 
         $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
         if ($obItem = $obBasket->getExistsItem('catalog', $intProductID)) {
-            if ($strMethod == 'add') {
-                $intQuantity += $obItem->getQuantity();
-            }
-            $obItem->setField('QUANTITY', $intQuantity);
+            $obItem->setField('QUANTITY', $obItem->getQuantity() + $intQuantity);
         } else {
             $obItem = $obBasket->createItem('catalog', $intProductID);
             $arFields = array(
@@ -74,13 +49,13 @@ class Basket
             );
 
             if ($isXmlId) {
-                $strProductXmlId = \DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'XML_ID');
-                $intSectionID = \DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'IBLOCK_SECTION_ID');
+                $strProductXmlId = DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'XML_ID');
+                $intSectionID = DK\Helper\Iblock\Element::getFieldsByID($intProductID, 'IBLOCK_SECTION_ID');
 
                 $arFields['PRODUCT_XML_ID'] = $strProductXmlId;
 
                 if (is_numeric($intSectionID) && $intSectionID > 0) {
-                    $strCatalogXmlId = \DK\Helper\Iblock\Section::getFieldsByID($intSectionID, 'XML_ID');
+                    $strCatalogXmlId = DK\Helper\Iblock\Section::getFieldsByID($intSectionID, 'XML_ID');
                     $arFields['CATALOG_XML_ID'] = $strCatalogXmlId;
                 }
             }
@@ -89,7 +64,23 @@ class Basket
         $obBasket->save();
     }
 
-    public static function count($isOnlyItems = false)
+    public static function delete($intItemID)
+    {
+        $obContext = Context::getCurrent();
+        $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
+        $obBasket->getItemById($intItemID)->delete();
+        $obBasket->save();
+    }
+
+    public static function deleteByProductId($intProductID)
+    {
+        $obContext = Context::getCurrent();
+        $obBasket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $obContext->getSite());
+        $obBasket->getExistsItem('catalog', $intProductID)->delete();
+        $obBasket->save();
+    }
+
+    public static function count()
     {
         $obContext = Context::getCurrent();
 
@@ -97,11 +88,7 @@ class Basket
 
         $intCount = 0;
         foreach ($obBasket as $obBasketItem) {
-            if ($isOnlyItems) {
-                $intCount ++;
-            } else {
-                $intCount += $obBasketItem->getQuantity();
-            }
+            $intCount += $obBasketItem->getQuantity();
         }
 
         return $intCount;

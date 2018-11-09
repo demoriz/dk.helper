@@ -82,6 +82,25 @@ class Element
         return true;
     }
 
+    public static function getAllFieldsByReference($arReference)
+    {
+        if (empty($arReference['USER_TYPE_SETTINGS']['TABLE_NAME']) || empty($arReference['VALUE'])) {
+            throw new SystemException('wrong reference');
+        }
+        $arFilter = array(
+            'UF_XML_ID' => $arReference['VALUE']
+        );
+        $arFields = self::getElement($arReference['USER_TYPE_SETTINGS']['TABLE_NAME'], $arFilter);
+        $arFields = $arFields[0];
+        if (is_numeric($arFields['UF_FILE'])) {
+            $arFields['UF_FILE'] = \CFile::GetPath($arFields['UF_FILE']);
+        }
+
+        $arReference['VALUE_DATA'] = $arFields;
+
+        return $arReference;
+    }
+
     private static function getEntityDataClass($strIblockData)
     {
         if (is_numeric($strIblockData)) {
