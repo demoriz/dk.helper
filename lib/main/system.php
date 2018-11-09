@@ -66,8 +66,7 @@ class System
                         if ($file->isExists()) {
                             include_once($file->getPath());
 
-                            /* @var \CModule $module */
-                            $module = new dk_helper();
+                            $module = new \dk_helper();
                             if ($module->IsInstalled()) {
                                 $module->DoUninstall();
                             }
