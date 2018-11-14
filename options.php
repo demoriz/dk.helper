@@ -72,3 +72,7 @@ if (!empty($request->get('dk_update'))) {
 
 $obOptions = new \CModuleOptions($strModuleID, $arTabs, $arGroups, $arOptions, $isShowRightsTab, $strAdditionalHTML);
 $obOptions->ShowHTML();
+
+if (!empty($request->get('update'))) {
+    LocalRedirect($_SERVER['HTTP_REFERER']);
+}
