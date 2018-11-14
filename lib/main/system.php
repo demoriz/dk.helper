@@ -24,6 +24,7 @@ class System
 
         $strFilePath = Application::getDocumentRoot() . $strFilePath;
         $strDirPath = Application::getDocumentRoot() . $strDirPath;
+        $strBackupPatch = Application::getDocumentRoot() . '/upload/dk_backup/dk_helper/';
 
         $file = new IO\File($strFilePath);
         if ($file->isExists()) {
@@ -52,34 +53,69 @@ class System
 
                 // распаковалось
                 if ($dir->isExists()) {
-                    // удаляем старый модуль
+                    // удаляем предыдущий бекап
+                    $backup = new IO\Directory($strBackupPatch);
+                    if ($backup->isExists()) {
+                        $backup->delete();
+                    }
+
+                    // перемещаем в бэкап старый модуль
                     $old = new IO\Directory($strModulePath);
                     if ($old->isExists()) {
-                        $old->delete();
-                    }
+                        $result = $old->rename($strBackupPatch);
 
-                    // копируем новый
-                    $result = $dir->rename($strModulePath);
+                        // бэкап успешно создан
+                        if ($result) {
+                            // копируем новый
+                            $result = $dir->rename($strModulePath);
 
-                    if ($result) {
-                        $file = new IO\File($strModulePath . 'install/index.php');
-                        if ($file->isExists()) {
-                            include_once($file->getPath());
+                            if ($result) {
+                                $file = new IO\File($strModulePath . 'install/index.php');
+                                if ($file->isExists()) {
+                                    include_once($file->getPath());
 
-                            $module = new \dk_helper();
-                            if ($module->IsInstalled()) {
-                                $module->DoUninstall();
+                                    $module = new \dk_helper();
+                                    if ($module->IsInstalled()) {
+                                        $module->DoUninstall();
+                                    }
+                                    $module->DoInstall();
+                                }
+
+                                $isResult = true;
                             }
-                            $module->DoInstall();
                         }
-
-                        $isResult = true;
                     }
+
+
                 }
             }
         }
 
         return $isResult;
+    }
+
+    public static function revert()
+    {
+        $strBackupPatch = Application::getDocumentRoot() . '/upload/dk_backup/dk_helper/';
+        $strModulePath = dirname(__FILE__) . '/../../';
+
+        $backup = new IO\Directory($strBackupPatch);
+        if ($backup->isExists()) {
+            $module = new IO\Directory($strModulePath);
+            if ($module->isExists()) {
+                $module->delete();
+            }
+
+            $backup->rename($strModulePath);
+        }
+    }
+
+    public static function isBackupExist()
+    {
+        $strBackupPatch = Application::getDocumentRoot() . '/upload/dk_backup/dk_helper/';
+        $backup = new IO\Directory($strBackupPatch);
+
+        return $backup->isExists();
     }
 
     public static function version()
