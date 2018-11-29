@@ -72,9 +72,12 @@ if (!empty($request->get('dk_update'))) {
     } else {
         LocalRedirect($_SERVER['HTTP_REFERER']);
     }
-} elseif (!empty($request->get('update'))) {
-    LocalRedirect($_SERVER['HTTP_REFERER']);
+
 }
 
 $obOptions = new \CModuleOptions($strModuleID, $arTabs, $arGroups, $arOptions, $isShowRightsTab, $strAdditionalHTML);
 $obOptions->ShowHTML();
+
+if (empty($request->get('dk_update')) && !empty($request->get('update'))) {
+    LocalRedirect($_SERVER['HTTP_REFERER']);
+}
