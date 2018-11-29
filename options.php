@@ -64,15 +64,17 @@ if (!empty($request->get('dk_update'))) {
     if ($isResult === false) {
         $strAdditionalHTML .= '<div>';
         $strAdditionalHTML .= '<p style="color: red;">' . Loc::getMessage('DK_HELPER_INSTALL_ERROR') . '</p>';
+        $arError = \DK\Helper\Main\System::getError();
+        foreach ($arError as $strError) {
+            $strAdditionalHTML .= '<p style="color: red;">' . $strError . '</p>';
+        }
         $strAdditionalHTML .= '</div>';
     } else {
         LocalRedirect($_SERVER['HTTP_REFERER']);
     }
+} elseif (!empty($request->get('update'))) {
+    LocalRedirect($_SERVER['HTTP_REFERER']);
 }
 
 $obOptions = new \CModuleOptions($strModuleID, $arTabs, $arGroups, $arOptions, $isShowRightsTab, $strAdditionalHTML);
 $obOptions->ShowHTML();
-
-if (!empty($request->get('update'))) {
-    LocalRedirect($_SERVER['HTTP_REFERER']);
-}

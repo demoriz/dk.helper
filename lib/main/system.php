@@ -10,9 +10,12 @@ use \Bitrix\Main\Config\Option;
 class System
 {
     private const MODULE_ID = 'dk.helper';
+    private static $arError = array();
 
     public static function update()
     {
+        $isResult = false;
+
         $http = new HttpClient();
 
         $strBranch = Option::get(self::MODULE_ID, 'BRANCH');
@@ -39,10 +42,10 @@ class System
             $dir->delete();
         }
 
-        $isResult = $http->download($strFileUrl, $strFilePath);
+        $result = $http->download($strFileUrl, $strFilePath);
 
         // скачалось
-        if ($isResult) {
+        if ($result) {
             $archive = \CBXArchive::GetArchive($strFilePath, 'TAR.GZ');
             $result = $archive->Unpack($strDirPath);
 
@@ -58,6 +61,8 @@ class System
                     if ($backup->isExists()) {
                         $backup->delete();
                     }
+                    // создаём заново
+                    IO\Directory::createDirectory($strBackupPatch);
 
                     // перемещаем в бэкап старый модуль
                     $old = new IO\Directory($strModulePath);
@@ -82,13 +87,25 @@ class System
                                 }
 
                                 $isResult = true;
+                            } else {
+                                self::$arError[] = 'Update error';
                             }
+
+                        } else {
+                            self::$arError[] = 'Backup error';
+                            self::$arError[] = $strBackupPatch;
                         }
+
                     }
 
-
                 }
+
+            } else {
+                self::$arError[] = 'Unpack error';
             }
+
+        } else {
+            self::$arError[] = 'Download error';
         }
 
         return $isResult;
@@ -133,5 +150,10 @@ class System
         }
 
         return $strNewVersion;
+    }
+
+    public static function getError()
+    {
+        return self::$arError;
     }
 }
