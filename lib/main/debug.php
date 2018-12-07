@@ -28,7 +28,7 @@ class Debug
             $strRetVal .= '<span style="color: #cb7832;">Number</span>: <span style="color: #6896ba;">' . $data . '</span>';
 
         } elseif (\is_string($data)) {
-            $strRetVal .= '<span style="color: #cb7832;">String</span>: <span style="color: #6a8759;">' . "'" . $data . "'" . '</span>';
+            $strRetVal .= '<span style="color: #cb7832;">String</span>: <span style="color: #6a8759;">' . "'" . htmlentities($data) . "'" . '</span>';
 
         } elseif (\is_null($data)) {
             $strRetVal .= '<span style="color: #bababa;">NULL</span>';
