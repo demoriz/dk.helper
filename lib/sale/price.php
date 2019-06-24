@@ -38,6 +38,27 @@ class Price
         \CIBlockElement::SetPropertyValuesEx($intProductElementID, false, array($strMaxPropertyName => $arMaximum['PRICE']));
     }
 
+    public static function getDiscountPrice($intProductElementID, $intCatalogGroupID)
+    {
+        $flPrice = 0;
+
+        $arFilter = array(
+            'PRODUCT_ID' => $intProductElementID,
+            'CATALOG_GROUP_ID' => $intCatalogGroupID
+        );
+        $arSelect = array(
+            'PRICE',
+            'CURRENCY'
+        );
+        $dbPrice = \CPrice::GetList(array(), $arFilter, false, false, $arSelect);
+        if ($arPrice = $dbPrice->Fetch()) {
+            $arDiscount = \CCatalogDiscount::GetDiscountByProduct($intProductElementID);
+            $flPrice = \CCatalogProduct::CountPriceWithDiscount($arPrice['PRICE'], $arPrice['CURRENCY'], $arDiscount);
+        }
+
+        return $flPrice;
+    }
+
     static public function add($intProductID, $intPriceTypeID, $floatPrice, $strCurrency = 'RUB')
     {
         $arFields = array(

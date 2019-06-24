@@ -159,6 +159,10 @@ Price::setMinMaxByProduct($intProductElementID, $intCatalogGroupID, $strMaxPrope
 ```
 _Заполняет указанные свойства переданного товара минимальной и максимальной ценой из всех имеющихся предложений данного товара._
 ```php
+Price::getDiscountPrice($intProductElementID, $intCatalogGroupID)
+```
+_Возвращает цену товара каталога, после применения скидок, или 0 в случае ошибки._
+```php
 Price::add($intProductID, $intPriceTypeID, $floatPrice, $strCurrency = 'RUB')
 ```
 _Устанавливает для товара $intProductID цену типа $intPriceTypeID в значение $floatPrice. Если цена есть то обновлет. Если нет - добавляет._

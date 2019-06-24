@@ -10,9 +10,12 @@ use \Bitrix\Main\Config\Option;
 class System
 {
     private const MODULE_ID = 'dk.helper';
+    private static $arError = array();
 
     public static function update()
     {
+        $isResult = false;
+
         $http = new HttpClient();
 
         $strBranch = Option::get(self::MODULE_ID, 'BRANCH');
@@ -24,6 +27,7 @@ class System
 
         $strFilePath = Application::getDocumentRoot() . $strFilePath;
         $strDirPath = Application::getDocumentRoot() . $strDirPath;
+        $strBackupPatch = Application::getDocumentRoot() . '/upload/dk_backup/dk_helper/';
 
         $file = new IO\File($strFilePath);
         if ($file->isExists()) {
@@ -38,10 +42,10 @@ class System
             $dir->delete();
         }
 
-        $isResult = $http->download($strFileUrl, $strFilePath);
+        $result = $http->download($strFileUrl, $strFilePath);
 
         // скачалось
-        if ($isResult) {
+        if ($result) {
             $archive = \CBXArchive::GetArchive($strFilePath, 'TAR.GZ');
             $result = $archive->Unpack($strDirPath);
 
@@ -52,34 +56,83 @@ class System
 
                 // распаковалось
                 if ($dir->isExists()) {
-                    // удаляем старый модуль
+                    // удаляем предыдущий бекап
+                    $backup = new IO\Directory($strBackupPatch);
+                    if ($backup->isExists()) {
+                        $backup->delete();
+                    }
+                    // создаём заново
+                    IO\Directory::createDirectory($strBackupPatch);
+
+                    // перемещаем в бэкап старый модуль
                     $old = new IO\Directory($strModulePath);
                     if ($old->isExists()) {
-                        $old->delete();
-                    }
+                        $result = $old->rename($strBackupPatch);
 
-                    // копируем новый
-                    $result = $dir->rename($strModulePath);
+                        // бэкап успешно создан
+                        if ($result) {
+                            // копируем новый
+                            $result = $dir->rename($strModulePath);
 
-                    if ($result) {
-                        $file = new IO\File($strModulePath . 'install/index.php');
-                        if ($file->isExists()) {
-                            include_once($file->getPath());
+                            if ($result) {
+                                $file = new IO\File($strModulePath . 'install/index.php');
+                                if ($file->isExists()) {
+                                    include_once($file->getPath());
 
-                            $module = new \dk_helper();
-                            if ($module->IsInstalled()) {
-                                $module->DoUninstall();
+                                    $module = new \dk_helper();
+                                    if ($module->IsInstalled()) {
+                                        $module->DoUninstall();
+                                    }
+                                    $module->DoInstall();
+                                }
+
+                                $isResult = true;
+                            } else {
+                                self::$arError[] = 'Update error';
                             }
-                            $module->DoInstall();
+
+                        } else {
+                            self::$arError[] = 'Backup error';
+                            self::$arError[] = $strBackupPatch;
                         }
 
-                        $isResult = true;
                     }
+
                 }
+
+            } else {
+                self::$arError[] = 'Unpack error';
             }
+
+        } else {
+            self::$arError[] = 'Download error';
         }
 
         return $isResult;
+    }
+
+    public static function revert()
+    {
+        $strBackupPatch = Application::getDocumentRoot() . '/upload/dk_backup/dk_helper/';
+        $strModulePath = dirname(__FILE__) . '/../../';
+
+        $backup = new IO\Directory($strBackupPatch);
+        if ($backup->isExists()) {
+            $module = new IO\Directory($strModulePath);
+            if ($module->isExists()) {
+                $module->delete();
+            }
+
+            $backup->rename($strModulePath);
+        }
+    }
+
+    public static function isBackupExist()
+    {
+        $strBackupPatch = Application::getDocumentRoot() . '/upload/dk_backup/dk_helper/';
+        $backup = new IO\Directory($strBackupPatch);
+
+        return $backup->isExists();
     }
 
     public static function version()
@@ -97,5 +150,10 @@ class System
         }
 
         return $strNewVersion;
+    }
+
+    public static function getError()
+    {
+        return self::$arError;
     }
 }
