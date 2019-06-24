@@ -2,10 +2,20 @@
 
 namespace DK\Helper\Others;
 
-use \Bitrix\Main\Type;
+use Bitrix\Main\ObjectException;
+use Bitrix\Main\Type;
 
+/**
+ * Class DateTime
+ * @package DK\Helper\Others
+ */
 class DateTime
 {
+    /**
+     * @param Type\DateTime $obFirstData
+     * @param Type\DateTime $obSecondData
+     * @return array
+     */
     static public function getInterval(Type\DateTime $obFirstData, Type\DateTime $obSecondData)
     {
         $intDiff = $obFirstData->getTimestamp() - $obSecondData->getTimestamp();
@@ -36,6 +46,13 @@ class DateTime
         return $arTimes;
     }
 
+    /**
+     * @param $strDate
+     * @param $strFormat1
+     * @param $strFormat2
+     * @return string
+     * @throws ObjectException
+     */
     static public function reFormatDate($strDate, $strFormat1, $strFormat2)
     {
         $date = new Type\DateTime($strDate, $strFormat1);
@@ -43,5 +60,67 @@ class DateTime
         $strDate = $date->format($strFormat2);
 
         return $strDate;
+    }
+
+    /**
+     * @param Type\DateTime $date
+     * @return bool
+     * @throws ObjectException
+     */
+    static public function isToday(Type\DateTime $date)
+    {
+        $isToday = false;
+
+        $strDate = $date->format('Y-m-d');
+        $date = new Type\DateTime();
+        $strToday = $date->format('Y-m-d');
+
+        if ($strDate == $strToday) {
+            $isToday = true;
+        }
+
+        return $isToday;
+    }
+
+    /**
+     * @param Type\DateTime $date
+     * @return bool
+     * @throws ObjectException
+     */
+    static public function isTomorrow(Type\DateTime $date)
+    {
+        $isTomorrow = false;
+
+        $strDate = $date->format('Y-m-d');
+        $date = new Type\DateTime();
+        $date->add('1 day');
+        $strTomorrow = $date->format('Y-m-d');
+
+        if ($strDate == $strTomorrow) {
+            $isTomorrow = true;
+        }
+
+        return $isTomorrow;
+    }
+
+    /**
+     * @param Type\DateTime $date
+     * @return bool
+     * @throws ObjectException
+     */
+    static public function isYesterday(Type\DateTime $date)
+    {
+        $isYesterday = false;
+
+        $strDate = $date->format('Y-m-d');
+        $date = new Type\DateTime();
+        $date->add('-1 day');
+        $strYesterday = $date->format('Y-m-d');
+
+        if ($strDate == $strYesterday) {
+            $isYesterday = true;
+        }
+
+        return $isYesterday;
     }
 }
