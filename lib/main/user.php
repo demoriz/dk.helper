@@ -24,6 +24,7 @@ class User
         $dbUser = \CUser::GetByLogin($strLogin);
         if ($arUser = $dbUser->Fetch()) {
             // Пользователь существует
+            $arUser['IS_NEW'] = false;
             return $arUser;
         }
         if (!empty($arParams)) {
@@ -40,6 +41,7 @@ class User
 
             if (intval($intUserID)) {
                 $arParams['ID'] = $intUserID;
+                $arParams['IS_NEW'] = true;
             } else {
                 throw new SystemException($obUser->LAST_ERROR);
             }
