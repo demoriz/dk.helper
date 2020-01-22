@@ -101,7 +101,7 @@ class Property
             'IBLOCK_ID' => $intIblockID,
             'PROPERTY_ID' => $strPropertyCode,
         );
-        $dbEnum = \CIBlockPropertyEnum::GetList(array(), $arFilter);
+        $dbEnum = \CIBlockPropertyEnum::GetList(array('sort' => 'asc'), $arFilter);
         while ($arFields = $dbEnum->GetNext()) {
             $arResult[$arFields['ID']] = $arFields['VALUE'];
         }
