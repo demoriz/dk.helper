@@ -2,8 +2,8 @@
 
 namespace DK\Helper\Others;
 
-use Bitrix\Main\ObjectException;
 use Bitrix\Main\Type;
+use Bitrix\Main\ObjectException;
 
 /**
  * Class DateTime
@@ -122,5 +122,34 @@ class DateTime
         }
 
         return $isYesterday;
+    }
+
+    static public function getHowMuchIsLeft($intTimestamp)
+    {
+        $datetime1 = date_create(FormatDate('Y-m-d H:i', $intTimestamp));
+        $datetime2 = date_create('now', new \DateTimeZone('Europe/Moscow'));
+        $interval = date_diff($datetime1, $datetime2);
+
+        $strData = $interval->format('%y-%m-%d-%h-%i');
+        $arData = explode('-', $strData);
+
+        $strTime = '';
+        if ($arData[0] > 0) {
+            $strTime .= Strings::declension($arData[0], array('год', 'года', 'лет'), true);
+        }
+        if ($arData[1] > 0) {
+            $strTime .= ' ' . Strings::declension($arData[1], array('месяц', 'месяца', 'месяцев'), true);
+        }
+        if ($arData[2] > 0) {
+            $strTime .= ' ' . Strings::declension($arData[2], array('день', 'дня', 'дней'), true);
+        }
+        if ($arData[3] > 0) {
+            $strTime .= ' ' . Strings::declension($arData[3], array('час', 'часа', 'часов'), true);
+        }
+        if ($arData[4] > 0) {
+            $strTime .= ' ' . Strings::declension($arData[4], array('минута', 'минуты', 'минут'), true);
+        }
+
+        return $strTime;
     }
 }

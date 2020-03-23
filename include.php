@@ -4,6 +4,7 @@ CModule::AddAutoloadClasses(
     array(
         'DK\Helper\Highload\Element' => 'lib/highload/element.php',
         'DK\Helper\IO\Serialize' => 'lib/io/serialize.php',
+        'DK\Helper\IO\File' => 'lib/io/file.php',
         'DK\Helper\Iblock\Element' => 'lib/iblock/element.php',
         'DK\Helper\Iblock\Section' => 'lib/iblock/section.php',
         'DK\Helper\Iblock\Property' => 'lib/iblock/property.php',

@@ -101,7 +101,7 @@ class Element
         return $arReference;
     }
 
-    private static function getEntityDataClass($strIblockData)
+    public static function getEntityDataClass($strIblockData)
     {
         if (is_numeric($strIblockData)) {
             $arHLBlock = HighloadBlockTable::getById($strIblockData)->fetch();
