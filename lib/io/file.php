@@ -6,16 +6,16 @@ class File
 {
     public static function getHRSize($intByte)
     {
-        $arFormats = array('Б', 'КБ', 'МБ', 'ГБ', 'ТБ');
-        $intFormat = 0;
-        $intFileSize = 0;
-
-        while ($intByte > 1024 && count($arFormats) != ++$intFormat) {
-            $intFileSize = round($intByte / 1024, 2);
+        $metrics[0] = 'байт';
+        $metrics[1] = 'KB';
+        $metrics[2] = 'MB';
+        $metrics[3] = 'GB';
+        $metrics[4] = 'TB';
+        $metric = 0;
+        while (floor($intByte / 1024) > 0) {
+            ++$metric;
+            $intByte /= 1024;
         }
-
-        $arFormats[] = 'ТБ';
-
-        return $intFileSize . $arFormats[$intFormat];
+        return round($intByte, 1) . " " . (isset($metrics[$metric]) ? $metrics[$metric] : '??');
     }
 }
