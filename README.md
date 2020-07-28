@@ -13,6 +13,10 @@
 
 ## DK\Helper\Highload\Element
 ```php
+Element::getEntityDataClass($strIblockData)
+```
+_Возвращает класс Entity для работы с Highload инфоблоком. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
+```php
 Element::getElement($strIblockData, $arFilter = array(), $arSelect = array(), $intLimit = 0)
 ```
 _Возвращает элементы Highload инфоблока в виде массива. При необходимости можно использовать фильтрацию, указать нужные поля и ограничить количество. В $strIblockData передаётся либо id Highload инфоблока либо TABLE_NAME._
