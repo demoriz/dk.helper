@@ -20,7 +20,7 @@ Class dk_helper extends CModule
     var $PARTNER_URI;
     var $MODULE_GROUP_RIGHTS = 'N';
 
-    function dk_helper()
+    function __construct()
     {
         $arModuleVersion = array();
         include(dirname(__FILE__) . '/version.php');

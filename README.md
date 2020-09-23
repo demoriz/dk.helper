@@ -223,6 +223,12 @@ Image::resize($intFileID, $intWidth = 999999, $intHeight = 999999)
 ```
 _Уменьшает изображение с id $intFileID до ширины $intWidth и высоты $intHeight пропорционально. Возвращает массив._
 
+## DK\Helper\Others\Struct
+```php
+Struct::menu($arResult)
+```
+_Реструктуризует массив $arResult получаемый в шаблоне компонента меню, делая его многомерным. В возвращаемом массиве дочерние подпункты будут сгруппированы и расположены в 'CHILDREN' родительского пункта._
+
 ## DK\Helper\Main\User
 ```php
 User::getID($isAllowAnonymous = false)

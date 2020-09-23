@@ -15,6 +15,7 @@ CModule::AddAutoloadClasses(
         'DK\Helper\Others\Cookie' => 'lib/others/cookie.php',
         'DK\Helper\Others\DateTime' => 'lib/others/datetime.php',
         'DK\Helper\Others\Image' => 'lib/others/image.php',
+        'DK\Helper\Others\Struct' => 'lib/others/struct.php',
         'DK\Helper\Main\User' => 'lib/main/user.php',
         'DK\Helper\Main\Debug' => 'lib/main/debug.php',
         'DK\Helper\Main\GarbageStorage' => 'lib/main/garbage_storage.php',
