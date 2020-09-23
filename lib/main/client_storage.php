@@ -2,22 +2,26 @@
 
 namespace DK\Helper\Main;
 
+use Bitrix\Main\Application;
+use Bitrix\Main\Web\Cookie;
+
 class ClientStorage
 {
 
     public static function set($strName, $mixValue)
     {
-        global $APPLICATION;
+        $strName = self::prepareName($strName);
 
         $_SESSION[$strName] = $mixValue;
-        $APPLICATION->set_cookie($strName, $mixValue);
+
+        $cookie = new Cookie($strName, $mixValue);
+        Application::getInstance()->getContext()->getResponse()->addCookie($cookie);
     }
 
     public static function get($strName, $mixDefault)
     {
-        global $APPLICATION;
-
-        $mixValue = $APPLICATION->get_cookie($strName);
+        $strName = self::prepareName($strName);
+        $mixValue = Application::getInstance()->getContext()->getRequest()->getCookie($strName);
 
         if (isset($_SESSION[$strName])) {
             $mixValue = $_SESSION[$strName];
@@ -28,5 +32,12 @@ class ClientStorage
         }
 
         return $mixValue;
+    }
+
+    private static function prepareName($strName)
+    {
+        $strName = str_replace('.', '_', $strName);
+
+        return $strName;
     }
 }
