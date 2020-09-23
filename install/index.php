@@ -31,7 +31,7 @@ Class dk_helper extends CModule
         $this->MODULE_DESCRIPTION = Loc::getMessage('DK_HELPER_DESCRIPTION');
 
         $this->PARTNER_NAME = Loc::getMessage('DK_HELPER_PARTNER_NAME');
-        $this->PARTNER_URI = '';
+        $this->PARTNER_URI = 'https://elba.kontur.ru/card/karikh';
     }
 
     function DoInstall()
