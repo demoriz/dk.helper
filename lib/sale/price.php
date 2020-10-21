@@ -3,6 +3,7 @@
 namespace DK\Helper\Sale;
 
 use Bitrix\Main\Loader;
+use Bitrix\Main\SystemException;
 
 Loader::includeModule('iblock');
 Loader::includeModule('catalog');
@@ -61,19 +62,27 @@ class Price
 
     static public function add($intProductID, $intPriceTypeID, $floatPrice, $strCurrency = 'RUB')
     {
-        $arFields = array(
+        $arFieldsPrice = array(
             'PRODUCT_ID' => $intProductID,
+            'PRICE' => $floatPrice,
             'CATALOG_GROUP_ID' => $intPriceTypeID,
             'CURRENCY' => $strCurrency
         );
 
-        $dbPrice = \CPrice::GetList(array(), $arFields);
+        $dbPrice = \Bitrix\Catalog\Model\Price::getList(array(
+            'filter' => array(
+                'PRODUCT_ID' => $intProductID,
+                'CATALOG_GROUP_ID' => $intPriceTypeID
+            )));
 
-        $arFields['PRICE'] = $floatPrice;
-        if ($arPrice = $dbPrice->GetNext()) {
-            \CPrice::Update($arPrice['ID'], $arFields);
+
+        if ($arPrice = $dbPrice->fetch()) {
+            $result = \Bitrix\Catalog\Model\Price::update($arPrice['ID'], $arFieldsPrice);
+            if (!$result->isSuccess()) throw new SystemException($result->getErrorMessages());
+
         } else {
-            \CPrice::Add($arFields);
+            $result = \Bitrix\Catalog\Model\Price::add($arFieldsPrice);
+            if (!$result->isSuccess()) throw new SystemException($result->getErrorMessages());
         }
     }
 }
