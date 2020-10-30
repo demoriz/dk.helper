@@ -79,4 +79,16 @@ class Strings
 
         return $strWord;
     }
+
+    /**
+     * @param $str
+     * @param string $encoding
+     * @return string
+     */
+    public function upperFirst($str, $encoding = 'UTF8')
+    {
+        return
+            mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding) .
+            mb_strtolower(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding));
+    }
 }

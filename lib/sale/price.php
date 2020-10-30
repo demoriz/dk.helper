@@ -3,7 +3,10 @@
 namespace DK\Helper\Sale;
 
 use Bitrix\Main\Loader;
+use Bitrix\Catalog\GroupTable;
 use Bitrix\Main\SystemException;
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ObjectPropertyException;
 
 Loader::includeModule('iblock');
 Loader::includeModule('catalog');
@@ -84,5 +87,24 @@ class Price
             $result = \Bitrix\Catalog\Model\Price::add($arFieldsPrice);
             if (!$result->isSuccess()) throw new SystemException($result->getErrorMessages());
         }
+    }
+
+    /**
+     * Возвращаем базовую цену.
+     *
+     * @return array|false|mixed
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public static function getBasePrice()
+    {
+        $dbGroup = GroupTable::getList(array(
+            'filter' => array('BASE' => 'Y'),
+            'select' => array('*'),
+            'cache' => array('ttl' => 3600),
+        ));
+
+        return $dbGroup->fetch();
     }
 }
