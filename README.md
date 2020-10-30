@@ -101,7 +101,7 @@ Serialize::ride($strName)
 ```
 _Получает любой сохранённый предыдущим методом объект из файла в upload._
 
-## DK\Helper\Sale\Basket
+## DK\Helper\Sale\Basket (!!! deprecated use DK\Helper\Catalog\Basket !!!)
 ```php
 Basket::clean($obBasket)
 ```

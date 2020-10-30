@@ -11,8 +11,20 @@ use Bitrix\Sale\DiscountCouponsManager;
 
 Loader::includeModule('sale');
 
+
+/**
+ * Class Basket
+ * @deprecated use DK\Helper\Catalog\Basket
+ * @package DK\Helper\Sale
+ */
 class Basket
 {
+    /**
+     * @param Sale\Basket $obBasket
+     * @throws SystemException
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
     public static function clean(Sale\Basket $obBasket)
     {
         if (empty($obBasket)) {
@@ -24,6 +36,13 @@ class Basket
         }
     }
 
+    /**
+     * @param $intProductID
+     * @param int $intQuantity
+     * @param false $isXmlId
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
     public static function add($intProductID, $intQuantity = 1, $isXmlId = false)
     {
         if (!is_numeric($intQuantity)) {
@@ -64,6 +83,13 @@ class Basket
         $obBasket->save();
     }
 
+    /**
+     * @param $intItemID
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\ObjectNotFoundException
+     */
     public static function delete($intItemID)
     {
         $obContext = Context::getCurrent();
@@ -72,6 +98,12 @@ class Basket
         $obBasket->save();
     }
 
+    /**
+     * @param $intProductID
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ObjectNotFoundException
+     */
     public static function deleteByProductId($intProductID)
     {
         $obContext = Context::getCurrent();
@@ -80,6 +112,9 @@ class Basket
         $obBasket->save();
     }
 
+    /**
+     * @return int
+     */
     public static function count()
     {
         $obContext = Context::getCurrent();
@@ -94,6 +129,10 @@ class Basket
         return $intCount;
     }
 
+    /**
+     * @param string $strCoupon
+     * @return array
+     */
     public static function getDiscountSum($strCoupon = '')
     {
         global $USER;

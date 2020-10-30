@@ -11,6 +11,7 @@ CModule::AddAutoloadClasses(
         'DK\Helper\Sale\Order' => 'lib/sale/order.php',
         'DK\Helper\Sale\Price' => 'lib/sale/price.php',
         'DK\Helper\Sale\Basket' => 'lib/sale/basket.php',
+        'DK\Helper\Catalog\Basket' => 'lib/catalog/basket.php',
         'DK\Helper\Others\Strings' => 'lib/others/string.php',
         'DK\Helper\Others\Cookie' => 'lib/others/cookie.php',
         'DK\Helper\Others\DateTime' => 'lib/others/datetime.php',
