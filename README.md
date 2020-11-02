@@ -101,7 +101,7 @@ Serialize::ride($strName)
 ```
 _Получает любой сохранённый предыдущим методом объект из файла в upload._
 
-## DK\Helper\Sale\Basket (!!! deprecated use DK\Helper\Catalog\Basket !!!)
+## ~~DK\Helper\Sale\Basket~~<br>!!! deprecated use DK\Helper\Catalog\Basket
 ```php
 Basket::clean($obBasket)
 ```
@@ -157,7 +157,7 @@ Order::byOneClick($intUserID = NULL, $arProperties)
 ```
 _Создаёт быстрый заказ. От предыдущего метода отличается необходимостью передать в ключе 'PRODUCT_ID' в массиве $arProperties идентификатор товара. Метод создавался для часто используемого функционала "Заказ в один клик"._
 
-## DK\Helper\Sale\Price
+## ~~DK\Helper\Sale\Price~~<br>!!! deprecated use DK\Helper\Catalog\Price
 ```php
 Price::setMinMaxByOffer($intOfferElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
 ```

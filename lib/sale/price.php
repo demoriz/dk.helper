@@ -3,16 +3,23 @@
 namespace DK\Helper\Sale;
 
 use Bitrix\Main\Loader;
-use Bitrix\Catalog\GroupTable;
-use Bitrix\Main\SystemException;
-use Bitrix\Main\ArgumentException;
-use Bitrix\Main\ObjectPropertyException;
 
 Loader::includeModule('iblock');
 Loader::includeModule('catalog');
 
+/**
+ * Class Price
+ * @deprecated use DK\Helper\Catalog\Price
+ * @package DK\Helper\Sale
+ */
 class Price
 {
+    /**
+     * @param $intOfferElementID
+     * @param $intCatalogGroupID
+     * @param string $strMaxPropertyName
+     * @param string $strMinPropertyName
+     */
     public static function setMinMaxByOffer($intOfferElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
     {
 
@@ -23,6 +30,12 @@ class Price
         }
     }
 
+    /**
+     * @param $intProductElementID
+     * @param $intCatalogGroupID
+     * @param string $strMaxPropertyName
+     * @param string $strMinPropertyName
+     */
     public static function setMinMaxByProduct($intProductElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
     {
 
@@ -42,6 +55,11 @@ class Price
         \CIBlockElement::SetPropertyValuesEx($intProductElementID, false, array($strMaxPropertyName => $arMaximum['PRICE']));
     }
 
+    /**
+     * @param $intProductElementID
+     * @param $intCatalogGroupID
+     * @return array|false|float|int
+     */
     public static function getDiscountPrice($intProductElementID, $intCatalogGroupID)
     {
         $flPrice = 0;
@@ -63,48 +81,27 @@ class Price
         return $flPrice;
     }
 
+    /**
+     * @param $intProductID
+     * @param $intPriceTypeID
+     * @param $floatPrice
+     * @param string $strCurrency
+     */
     static public function add($intProductID, $intPriceTypeID, $floatPrice, $strCurrency = 'RUB')
     {
-        $arFieldsPrice = array(
+        $arFields = array(
             'PRODUCT_ID' => $intProductID,
-            'PRICE' => $floatPrice,
             'CATALOG_GROUP_ID' => $intPriceTypeID,
             'CURRENCY' => $strCurrency
         );
 
-        $dbPrice = \Bitrix\Catalog\Model\Price::getList(array(
-            'filter' => array(
-                'PRODUCT_ID' => $intProductID,
-                'CATALOG_GROUP_ID' => $intPriceTypeID
-            )));
+        $dbPrice = \CPrice::GetList(array(), $arFields);
 
-
-        if ($arPrice = $dbPrice->fetch()) {
-            $result = \Bitrix\Catalog\Model\Price::update($arPrice['ID'], $arFieldsPrice);
-            if (!$result->isSuccess()) throw new SystemException($result->getErrorMessages());
-
+        $arFields['PRICE'] = $floatPrice;
+        if ($arPrice = $dbPrice->GetNext()) {
+            \CPrice::Update($arPrice['ID'], $arFields);
         } else {
-            $result = \Bitrix\Catalog\Model\Price::add($arFieldsPrice);
-            if (!$result->isSuccess()) throw new SystemException($result->getErrorMessages());
+            \CPrice::Add($arFields);
         }
-    }
-
-    /**
-     * Возвращаем базовую цену.
-     *
-     * @return array|false|mixed
-     * @throws ArgumentException
-     * @throws ObjectPropertyException
-     * @throws SystemException
-     */
-    public static function getBasePrice()
-    {
-        $dbGroup = GroupTable::getList(array(
-            'filter' => array('BASE' => 'Y'),
-            'select' => array('*'),
-            'cache' => array('ttl' => 3600),
-        ));
-
-        return $dbGroup->fetch();
     }
 }
