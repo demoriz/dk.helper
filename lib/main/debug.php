@@ -45,9 +45,9 @@ class Debug
             foreach ($data as $key => $value) {
                 $strRetVal .= "\n" . $strPrefix;
                 if (\is_numeric($key)) {
-                    $strRetVal .= '[<span style="color: #6896ba;">' . $key . '</span>] = ';
+                    $strRetVal .= '[<span style="color: #6896ba;">' . htmlspecialchars($key) . '</span>] = ';
                 } else {
-                    $strRetVal .= '[' . $key . '] = ';
+                    $strRetVal .= '[' . htmlspecialchars($key) . '] = ';
                 }
                 $strRetVal .= self::dump($value, $intIndent);
             }
