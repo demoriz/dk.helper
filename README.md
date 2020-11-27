@@ -157,6 +157,12 @@ Order::byOneClick($intUserID = NULL, $arProperties)
 ```
 _Создаёт быстрый заказ. От предыдущего метода отличается необходимостью передать в ключе 'PRODUCT_ID' в массиве $arProperties идентификатор товара. Метод создавался для часто используемого функционала "Заказ в один клик"._
 
+## DK\Helper\Sale\Gifts
+```php
+Gifts::getGifts(int $intProductId)
+```
+_Если передан непосредственно товар или торговое предложение, возвращает все подарки соответствующие ему. Если передан товар содержащий торговые предложения, то будут возвращены общие подрки для всех торговых предложений товара._
+
 ## ~~DK\Helper\Sale\Price~~<br>!!! deprecated use DK\Helper\Catalog\Price
 ```php
 Price::setMinMaxByOffer($intOfferElementID, $intCatalogGroupID, $strMaxPropertyName = 'MAXIMUM_PRICE', $strMinPropertyName = 'MINIMUM_PRICE')
