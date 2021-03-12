@@ -91,4 +91,30 @@ class Strings
             mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding) .
             mb_strtolower(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding));
     }
+
+    /**
+     * @param $strContent
+     * @param bool $isDirection
+     * @return string
+     */
+    public function translit($strContent, $isDirection = true)
+    {
+        $arRus = array('ё', 'ж', 'ц', 'ч', 'ш', 'щ', 'ю', 'я', 'Ё', 'Ж', 'Ц', 'Ч', 'Ш', 'Щ', 'Ю', 'Я');
+        $arLat = array('yo', 'zh', 'tc', 'ch', 'sh', 'sh', 'yu', 'ya', 'YO', 'ZH', 'TC', 'CH', 'SH', 'SH', 'YU', 'YA');
+
+        if ($isDirection) {
+            $strContent = str_replace($arRus, $arLat, $strContent);
+            $strContent = strtr($strContent,
+                "АБВГДЕЗИЙКЛМНОПРСТУФХЪЫЬЭабвгдезийклмнопрстуфхъыьэ",
+                "ABVGDEZIJKLMNOPRSTUFH_I_Eabvgdezijklmnoprstufh_i_e");
+
+        } else {
+            $strContent = str_replace($arLat, $arRus, $strContent);
+            $strContent = strtr($strContent,
+                "ABVGDEZIJKLMNOPRSTUFH_I_Eabvgdezijklmnoprstufh_i_e",
+                "АБВГДЕЗИЙКЛМНОПРСТУФХЪЫЬЭабвгдезийклмнопрстуфхъыьэ");
+        }
+
+        return $strContent;
+    }
 }
