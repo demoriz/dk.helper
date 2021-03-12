@@ -93,26 +93,36 @@ class Strings
     }
 
     /**
+     * ГОСТ 7.79-2000 схема Б
+     *
      * @param $strContent
      * @param bool $isDirection
      * @return string
      */
     public function translit($strContent, $isDirection = true)
     {
-        $arRus = array('ё', 'ж', 'ц', 'ч', 'ш', 'щ', 'ю', 'я', 'Ё', 'Ж', 'Ц', 'Ч', 'Ш', 'Щ', 'Ю', 'Я');
-        $arLat = array('yo', 'zh', 'tc', 'ch', 'sh', 'sh', 'yu', 'ya', 'YO', 'ZH', 'TC', 'CH', 'SH', 'SH', 'YU', 'YA');
+        $arRus = array(
+            array('Щ', 'щ', ' '),
+            array('ё', 'ж', 'ч', 'ш', 'ъ', 'ы', 'э', 'ю', 'я'),
+            array('Ё', 'Ж', 'Ч', 'Ш', 'Ы', 'Э', 'Ю', 'Я', 'Ъ'),
+            array('а', 'б', 'в', 'г', 'д', 'е', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ь'),
+            array('А', 'Б', 'В', 'Г', 'Д', 'Е', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ь')
+        );
+        $arLat = array(
+            array('Shh', 'shh', '_'),
+            array('yo', 'zh', 'ch', 'sh', '``', 'y`', 'e`', 'yu', 'ya'),
+            array('Yo', 'Zh', 'Ch', 'Sh', 'Y`', 'E`', 'Yu', 'Ya', '``'),
+            array('a', 'b', 'v', 'g', 'd', 'e', 'z', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'h', 'c', '`'),
+            array('A', 'B', 'V', 'G', 'D', 'E', 'Z', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'C', '`')
+        );
 
-        if ($isDirection) {
-            $strContent = str_replace($arRus, $arLat, $strContent);
-            $strContent = strtr($strContent,
-                "АБВГДЕЗИЙКЛМНОПРСТУФХЪЫЬЭабвгдезийклмнопрстуфхъыьэ",
-                "ABVGDEZIJKLMNOPRSTUFH_I_Eabvgdezijklmnoprstufh_i_e");
+        for ($i = 0; $i < count($arRus); ++$i) {
+            if ($isDirection) {
+                $strContent = str_replace($arRus[$i], $arLat[$i], $strContent);
 
-        } else {
-            $strContent = str_replace($arLat, $arRus, $strContent);
-            $strContent = strtr($strContent,
-                "ABVGDEZIJKLMNOPRSTUFH_I_Eabvgdezijklmnoprstufh_i_e",
-                "АБВГДЕЗИЙКЛМНОПРСТУФХЪЫЬЭабвгдезийклмнопрстуфхъыьэ");
+            } else {
+                $strContent = str_replace($arLat[$i], $arRus[$i], $strContent);
+            }
         }
 
         return $strContent;
