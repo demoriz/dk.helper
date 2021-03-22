@@ -2,8 +2,9 @@
 
 namespace DK\Helper\Others;
 
-use Bitrix\Main\Context;
 use Bitrix\Main\Web;
+use Bitrix\Main\Context;
+use Bitrix\Main\Application;
 
 class Cookie
 {
@@ -17,7 +18,7 @@ class Cookie
         return $obRequest->getCookie($strName);
     }
 
-    public static function setCookie($strName, $strValue, $strDomain = '')
+    public static function setCookie($strName, $strValue, $isAjax = false, $strDomain = '')
     {
         $obContext = Context::getCurrent();
         $obCookie = new Web\Cookie($strName, $strValue);
@@ -25,5 +26,7 @@ class Cookie
             $obCookie->setDomain($strDomain);
         }
         $obContext->getResponse()->addCookie($obCookie);
+
+        if ($isAjax) Application::getInstance()->getContext()->getResponse()->flush();
     }
 }

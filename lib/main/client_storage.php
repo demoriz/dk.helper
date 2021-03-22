@@ -8,7 +8,7 @@ use Bitrix\Main\Web\Cookie;
 class ClientStorage
 {
 
-    public static function set($strName, $mixValue)
+    public static function set($strName, $mixValue, $isAjax = false)
     {
         $strName = self::prepareName($strName);
 
@@ -16,6 +16,8 @@ class ClientStorage
 
         $cookie = new Cookie($strName, $mixValue);
         Application::getInstance()->getContext()->getResponse()->addCookie($cookie);
+
+        if ($isAjax) Application::getInstance()->getContext()->getResponse()->flush();
     }
 
     public static function get($strName, $mixDefault)
