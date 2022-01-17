@@ -266,7 +266,7 @@ _Выводит в месте вызова содержимое переданн
 ```php
 Debug::writeLog($data, $strFileName = '__var.log')
 ```
-_Является надстройкой над \Bitrix\Main\Diag\Debug::dumpToFile($arData, 'var name', '__var.log'). Из контекста и debug_backtrace() формируется полезная информация, такая как путь до файла, номер строки, имя переменной и передаётся вторым аргументом в стандартный API._
+_Является надстройкой над \Bitrix\Main\Diag\Debug::dumpToFile($arData, 'var name', '\__var.log'). Из контекста и debug_backtrace() формируется полезная информация, такая как путь до файла, номер строки, имя переменной и передаётся вторым аргументом в стандартный API._
 
 ## DK\Helper\Main\GarbageStorage
 ```php
