@@ -3,7 +3,6 @@
 namespace DK\Helper\Main;
 
 use Bitrix\Main\Diag\Debug as BxDebug;
-use Bitrix\Main\Type\DateTime;
 
 class Debug
 {
@@ -92,13 +91,28 @@ class Debug
     }
 
 
-    public static function writeLog($strFile, $intLine, $strMessage, $strFileName = '__var.log')
+    public static function writeLog($data, $strFileName = '__var.log')
     {
-        $date = new DateTime();
-        $strName = $strFile . ' [' . $intLine . ']';
+        $arTrace = debug_backtrace();
+        $arFileLines = file($arTrace[0]['file']);
+        $strLineData = $arFileLines[$arTrace[0]['line'] - 1];
+        preg_match("#writeLog\\((.+)\\);#", $strLineData, $arData);
 
-        $strMessage .= ' (' . $date->getTimestamp() . ' s)';
+        $strVarName = '';
+        if (!empty($arData[1])) {
+            $arParts = explode(',', $arData[1]);
+            if (count($arParts) > 1) {
+                unset($arParts[count($arParts) - 1]);
+            }
+            $strVarName = implode(',', $arParts);
+        }
 
-        BxDebug::writeToFile($strMessage, $strName, $strFileName);
+        $strFilePath = substr($arTrace[0]['file'], strlen($_SERVER['DOCUMENT_ROOT']));
+
+
+        $strName = $strFilePath . ' [' . $arTrace[0]['line'] . '] ' . $strVarName;
+
+
+        BxDebug::writeToFile($data, $strName, $strFileName);
     }
 }
